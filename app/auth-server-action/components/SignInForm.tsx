@@ -48,9 +48,9 @@ export default function SignInForm() {
 		startTransition( async()=>{
 
 			const result = await signInWithEmail(data);
-			const { error } = JSON.parse(result);
-			console.log(error);
-			if(error){
+			const { status } = JSON.parse(result);
+			console.log(status);
+			if(status != 200){
 				toast.error("Invalid Credentials");
 			}
 			else{

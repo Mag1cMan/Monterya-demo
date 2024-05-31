@@ -6,24 +6,30 @@ import {
   GoogleAuthProvider,
 } from "firebase/auth";
 import { auth } from "../firebase";
-import LoadingScreen from '../components/LoadingScreen.jsx';
+import LoadingScreen from "../components/LoadingScreen.jsx";
+import { AfterGoogleSignUp } from "../auth-server-action/action";
 
 const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading , setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
-  let globalAuthHandler;
 
-  const isAuthed = () => new Promise((resolve, reject) => {
-    globalAuthHandler = resolve;
-  })
+  const isAuthed = () =>
+    new Promise((resolve, reject) => {
+      globalAuthHandler = resolve;
+    });
 
-  const googleSignIn = () => {
-    const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider);
-  };
+    const googleSignIn = async () => {
+      const provider = new GoogleAuthProvider();
+      try {
+        await signInWithPopup(auth, provider);
+        await AfterGoogleSignUp();
+      } catch (error) {
+        console.error("Error during sign-in:", error);
+      }
+    };
 
   const logOut = () => {
     signOut(auth);
@@ -31,27 +37,33 @@ export const AuthContextProvider = ({ children }) => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-
-
-      //console.log("Curetn user" , currentUser);
-      if(currentUser != null){
+      if (currentUser) {
         setUser(currentUser);
         setLoading(false);
-      }
-      if(currentUser == null){
+      } else {
         setUser(null);
         setLoading(false);
-      }    
+      }
+
+      // //console.log("Curetn user" , currentUser);
+      // if(currentUser != null){
+      //   setUser(currentUser);
+      //   setLoading(false);
+      //   console.log("Trigger in function");
+
+      // }
+      // if(currentUser == null){
+      //   setUser(null);
+      //   setLoading(false);
+      // }
     });
     return () => unsubscribe();
   }, [user]);
 
   return (
     <AuthContext.Provider value={{ user, googleSignIn, logOut }}>
-      {loading ? <LoadingScreen/> : children}
+      {loading ? <LoadingScreen /> : children}
     </AuthContext.Provider>
-
-  
   );
 };
 

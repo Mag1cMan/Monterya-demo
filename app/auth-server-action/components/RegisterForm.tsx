@@ -19,7 +19,7 @@ import { Button } from "../../components/ui/button";
 // import { cn } from "@/lib/utils";
 import { cn } from "../../lib/utils"
 import { useTransition } from "react";
-import { signUpWithEmail } from "../action";
+import { CheckDupes, signUpWithEmail } from "../action";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -52,15 +52,17 @@ export default function RegisterForm() {
 	function onSubmit(data: z.infer<typeof FormSchema>) {
 		startTransition(async () => {
 			try {
-				const result = await signUpWithEmail(data);
-				const { error } = JSON.parse(result);
+				const check = await CheckDupes(data);
+				console.log(check);
+				// const result = await signUpWithEmail(data);
+				// const { error } = JSON.parse(result);
 				
-				if(error){
-					toast.error("Email Already in Use");
-				}
-				else{
-					toast.success("You are SignUp!");
-				}
+				// if(error){
+				// 	toast.error("Email Already in Use");
+				// }
+				// else{
+				// 	toast.success("You are SignUp!");
+				// }
 				
 			} catch (error) {
 				console.error('Error during sign up:', error);

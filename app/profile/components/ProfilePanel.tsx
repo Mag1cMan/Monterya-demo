@@ -92,16 +92,18 @@ export function ProfilePanel() {
 
               <Input
                 placeholder="UserName"
-                value={user.displayName ?? ""}
+                value={user.UserName ?? ""}
                 type="UserName"
+                disabled
               //onChange={field.onChange}
               />
-              <Typography> PlayerName : </Typography>
+              <Typography > PlayerName : </Typography>
 
               <Input
                 placeholder="PlayerName"
                 value={user.displayName ?? ""}
                 type="playerName"
+                disabled
               //onChange={field.onChange}
               />
             </div>
@@ -186,13 +188,13 @@ export function ProfilePanel() {
 
       </motion.div>
 
-      <button
+      {/* <button
         className="select-none rounded-lg bg-black py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-gray-900/10 transition-all hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
       onClick={TestFetching}
       //disabled={isLastStep}
       >
         Edit
-      </button>
+      </button> */}
 
     </div>
   )

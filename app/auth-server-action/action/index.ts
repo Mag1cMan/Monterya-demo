@@ -8,6 +8,36 @@ import { subscribe } from "diagnostics_channel";
 
 // Fix these to handler error accordingly
 
+export async function CheckDupes(data: {
+    email: string;
+    password: string;
+    confirm: string;
+}) {
+    try{
+        console.log("Sending POST request with email:", data.email);
+
+
+        const json = {email: data.email};
+        console.log(json);
+        const auth = getAuth();
+        const response = await fetch("https://api.monterya.com/AuthTest/Web/Checkduplicate", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(json), // body data type must match "Content-Type" header
+        });
+
+        console.log(response);
+
+    } 
+    catch (error) {
+        // Handle error here
+        console.error('Error signing up:', error);
+        return JSON.stringify({ status: error.message }); // Or handle the error message as you prefer
+    }
+}
+
 export async function signUpWithEmail(data: {
     email: string;
     password: string;
@@ -17,11 +47,11 @@ export async function signUpWithEmail(data: {
         const auth = getAuth();
         const result = await createUserWithEmailAndPassword(auth, data.email, data.password);
         addUserToDatabase();
-        return JSON.stringify(result);
+        return JSON.stringify({status : 200});
     } catch (error) {
         // Handle error here
         console.error('Error signing up:', error);
-        return JSON.stringify({ error: error.message }); // Or handle the error message as you prefer
+        return JSON.stringify({ status: error.message }); // Or handle the error message as you prefer
     }
 }
 
@@ -32,10 +62,10 @@ export async function signInWithEmail(data: {
     try {
         const auth = getAuth();
         const result = await signInWithEmailAndPassword(auth, data.email, data.password);
-        return JSON.stringify(result);
+        return JSON.stringify({status : 200});
     } catch (error) {
         // Handle error here
-        console.error('Error signing up:', error);
+        console.error('Error signing In:', error);
         return JSON.stringify({ error: error.message }); // Or handle the error message as you prefer
     }
 }
@@ -54,14 +84,23 @@ export async function readUserSession(){
     });
 }
 
+
+export async function AfterGoogleSignUp() {
+    console.log("Trigger After goolg login")
+    addUserToDatabase();
+}
+
 export async function addUserToDatabase() {
     try {
+
         const auth = getAuth();
         const currentUser = auth.currentUser;
 
         if (currentUser) {
+            console.log("Add user to database ")
+
             const docRef = doc(db, "users", currentUser.uid);
-                        
+            console.log(currentUser.uid);
             // Set the document data
             await setDoc(docRef, {
                 email: currentUser.email,
@@ -74,7 +113,7 @@ export async function addUserToDatabase() {
 
             const colRefC = doc(db, "userBalance", currentUser.uid);
 
-            await setDoc(colRefC, {
+            const a = await setDoc(colRefC, {
                 userId: currentUser.uid,
                 balance : 0,
                 Gold:0,
@@ -92,14 +131,6 @@ export async function addUserToDatabase() {
 }
 
 
-function generateRandomUserId() {
-    // Generate a random string with the desired format
-    const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
-    let userId = '';
-    for (let i = 0; i < 20; i++) {
-        userId += characters.charAt(Math.floor(Math.random() * characters.length));
-    }
-    return userId;
-}
+
 
 
