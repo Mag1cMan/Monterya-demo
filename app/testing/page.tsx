@@ -32,10 +32,10 @@ const page = () => {
   const { unityProvider, sendMessage, addEventListener, removeEventListener ,loadingProgression, isLoaded } =
     useUnityContext({
       // Replace with what the new path is if show Load Resource Error or GET Error
-      loaderUrl: `${unityContextLocation}/Monterya_WebBuild.loader.js`,
-      dataUrl: `${unityContextLocation}/Monterya_WebBuild.data`,
-      frameworkUrl: `${unityContextLocation}/Monterya_WebBuild.framework.js`,
-      codeUrl: `${unityContextLocation}/Monterya_WebBuild.wasm`,
+      loaderUrl: `${unityContextLocation}/0.2.2.loader.js`,
+      dataUrl: `${unityContextLocation}/0.2.2.data`,
+      frameworkUrl: `${unityContextLocation}/0.2.2.framework.js`,
+      codeUrl: `${unityContextLocation}/0.2.2.wasm`,
     });
   
 // 1EYikr0VG8SgxOLrpsk2rmzUmo83
