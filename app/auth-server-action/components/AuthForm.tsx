@@ -27,6 +27,7 @@ export function AuthForm() {
         </TabsContent>
       </Tabs>
       <OAuthForm />
+
     </div>
   );
 }

@@ -2,7 +2,8 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, on
 import { redirect } from "next/navigation";
 import { db } from "../../firebase";
 import { faker } from '@faker-js/faker';
-import { addDoc, collection, getDoc , serverTimestamp} from "firebase/firestore";
+import { addDoc, collection, doc, getDoc , serverTimestamp, setDoc} from "firebase/firestore";
+import { subscribe } from "diagnostics_channel";
 
 
 // Fix these to handler error accordingly
@@ -59,22 +60,27 @@ export async function addUserToDatabase() {
         const currentUser = auth.currentUser;
 
         if (currentUser) {
-            const colRef = collection(db, "users");
-
-            await addDoc(colRef, {
-                email: faker.internet.email(),
-                userId: generateRandomUserId(),
-                username:faker.internet.userName(),
-                isVerified: false,
+            const docRef = doc(db, "users", currentUser.uid);
+                        
+            // Set the document data
+            await setDoc(docRef, {
+                email: currentUser.email,
+                userId: currentUser.uid,
+                username: null,
+                DisplayName: null,
+                EmailVerified: false,
                 timeCreated: serverTimestamp(),
-
-
-                // email: currentUser.email,
-                // userId: currentUser.uid,
-                // username: currentUser.displayName,
-                // isVarified: currentUser.emailVerified,
-                // timeCreated: serverTimestamp,
             });
+
+            const colRefC = doc(db, "userBalance", currentUser.uid);
+
+            await setDoc(colRefC, {
+                userId: currentUser.uid,
+                balance : 0,
+                Gold:0,
+                Silver:0,
+                subscription: false,
+            })
 
             console.log('User added to Firestore successfully.');
         } else {
@@ -97,14 +103,3 @@ function generateRandomUserId() {
 }
 
 
-
-
-// const randomName = faker.person.fullName(); // Rowan Nikolaus
-// const randomEmail = faker.internet.email(); // Kassandra.Haley@erich.biz
-
-// if (currentUser) {
-    //     const userEmail = currentUser.email;
-    //     console.log("User email:", userEmail);
-    // } else {
-    //     console.error("No user is currently signed in.");
-    // }

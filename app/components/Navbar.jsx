@@ -6,8 +6,14 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { addUserToDatabase } from "../auth-server-action/action";
 import { toast } from "react-toastify";
+
+import Drawer from "react-modern-drawer";
+//import styles 👇
+import "react-modern-drawer/dist/index.css";
+import { Button, IconButton, Typography } from "@material-tailwind/react";
+
 const navigation = [
-  { name: "StartGame", href: "#", current: true },
+  { name: "StartGame", href: "testing", current: true },
   {
     name: "Game Wiki",
     href: "#",
@@ -15,7 +21,7 @@ const navigation = [
     dropdown: true,
     dropdownItems: ["Stoies", "Fetures", "Resouces"],
   },
-  { name: "Community", href: "auth-server-action", current: false },
+  { name: "Community", href: "#", current: false },
   { name: "M-Shop", href: "transaction-server-action", current: false },
 ];
 
@@ -29,13 +35,17 @@ const Navbar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
 
+  const [openRight, setOpenRight] = React.useState(false);
+  const [isOpen, setIsOpen] = React.useState(false);
+  const toggleDrawer = () => {
+    setIsOpen((prevState) => !prevState);
+  };
+
   useEffect(() => {
     const checkAuthentication = async () => {
       await new Promise((resolve) => setTimeout(resolve, 50));
       setLoading(false);
     };
-
-    console.log(user);
 
     checkAuthentication();
 
@@ -44,8 +54,6 @@ const Navbar = () => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, [user]);
-
-
 
   const handleDropdownClick = () => {
     setShowDropdown(!showDropdown);
@@ -75,15 +83,15 @@ const Navbar = () => {
     addUserToDatabase();
   }
 
-  
-
-  
   return (
-    <Disclosure as="nav" className="bg-transparent	fixed top-0 left-0 w-full z-10">
+    <Disclosure
+      as="nav"
+      className="bg-transparent	fixed top-0 left-0 w-full z-10"
+    >
       {({ open }) => (
         <>
-          <div className="mx-auto max-w-8xl px-2 sm:px-6 lg:px-8 sticky">
-            <div className="relative flex h-16 items-center justify-between">
+          <div className="mx-auto max-w-8xl px-2 sm:px-6 lg:px-8 sticky ">
+            <div className="relative flex h-16 items-center justify-between ">
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden ">
                 {/* Mobile menu button*/}
                 <Disclosure.Button className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:text-white ">
@@ -96,7 +104,6 @@ const Navbar = () => {
                   )}
                 </Disclosure.Button>
               </div>
-
               <div className="flex items-center justify-center sm:justify-start">
                 <div className="flex items-center">
                   <a href="/">
@@ -193,12 +200,15 @@ const Navbar = () => {
                 {loading ? null : !user ? (
                   // Content to render if user exists
 
-                <a href="/auth-server-action" className="inline-block px-4 py-1 mx-auto text-white bg-blue-600 rounded-md hover:bg-blue-600 ">
-                  Login
-                </a>
+                  <a
+                    href="/auth-server-action"
+                    className="inline-block px-4 py-1 mx-auto text-white bg-blue-600 rounded-md hover:bg-blue-600 "
+                  >
+                    Login
+                  </a>
+                ) : (
+                  // Render nothing if user doesn't exist
 
-                ) : // Render nothing if user doesn't exist
-                
                   <>
                     {/* <button
                       type="button"
@@ -209,10 +219,14 @@ const Navbar = () => {
                       <BellIcon className="h-6 w-6" aria-hidden="true" />
                     </button> */}
 
-                      <button type="button" className="px-4 py-2 text-white ">
-                        {user.email}
-                      </button>
-                    
+                    <button
+                      onClick={toggleDrawer}
+                      type="button"
+                      className="px-4 py-2 text-white "
+                    >
+                      {user.email}
+                    </button>
+
                     {/* Profile dropdown */}
                     <Menu as="div" className="relative ml-3">
                       <div>
@@ -239,7 +253,7 @@ const Navbar = () => {
                           <Menu.Item>
                             {({ active }) => (
                               <a
-                                href="#"
+                                href="/profile"
                                 className={classNames(
                                   active ? "bg-gray-100" : "",
                                   "block px-4 py-2 text-sm text-gray-700"
@@ -280,8 +294,8 @@ const Navbar = () => {
                         </Menu.Items>
                       </Transition>
                     </Menu>
-                  </>           
-                }
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -306,6 +320,57 @@ const Navbar = () => {
               ))}
             </div>
           </Disclosure.Panel>
+
+          {/*  WHy does it giv em a black backgournd?? fix htis  */}
+
+          <Drawer
+            open={isOpen}
+            onClose={toggleDrawer}
+            direction="left"
+            className="p-6"
+            size={500}
+          >
+            <div className="mb-6 flex items-center justify-between">
+              <Typography variant="h5" color="blue-gray">
+                Monterya
+              </Typography>
+              <IconButton
+                variant="text"
+                color="blue-gray"
+                onClick={toggleDrawer}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2}
+                  stroke="currentColor"
+                  className="h-5 w-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </IconButton>
+            </div>
+            <Typography color="gray" className="mb-8 pr-4 font-normal">
+              Monterya is an MMORPG where players can earn rewards by playing
+              the game. Set in a fantasy world, it offers exploration, quests,
+              and battles, with a unique 'play-to-earn' model.
+            </Typography>
+            <div className="flex gap-2">
+              <Button size="sm" variant="outlined">
+                SignUp
+              </Button>
+              <Button size="sm" variant="outlined">
+                Login
+              </Button>
+            </div>
+          </Drawer>
+
+          {/* End Drawer */}
         </>
       )}
     </Disclosure>

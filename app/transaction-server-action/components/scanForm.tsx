@@ -78,14 +78,14 @@ export function ScanForm() {
           >
             File Upload
           </label>
-          <input
+          {/* <input
             id="file"
             name="file"
             type="file"
             accept="image/*"
             onChange={(e) => setFile(e.target.files[0])}
             className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-          />
+          /> */}
         </div>
         <div>
           <button

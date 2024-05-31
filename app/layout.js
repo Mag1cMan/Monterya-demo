@@ -1,6 +1,7 @@
 // ./app/layout.js
 "use client";
 import NavbarApp from "./components/Navbar";
+import Footer from "./components/Footer";
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { AuthContextProvider } from "./context/AuthContext";
@@ -18,6 +19,7 @@ export default function RootLayout({ children }) {
           <AuthContextProvider>
             <NavbarApp />
               {children}
+            <Footer/>
           </AuthContextProvider>
         </NextUIProvider>
       </body>
