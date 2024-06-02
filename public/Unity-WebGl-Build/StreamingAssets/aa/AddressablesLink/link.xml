@@ -1,4 +1,7 @@
 <linker>
+  <assembly fullname="FishNet.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="FishNet.Managing.Logging.LevelLoggingConfiguration" preserve="all" />
+  </assembly>
   <assembly fullname="monterya.editor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
     <type fullname="IconData" preserve="all" />
     <type fullname="SpriteDictionary" preserve="all" />

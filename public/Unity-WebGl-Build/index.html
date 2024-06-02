@@ -56,15 +56,15 @@
       }
 
       var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/0.2.2.loader.js";
+      var loaderUrl = buildUrl + "/monterya0.2.3.loader.js";
       var config = {
-        dataUrl: buildUrl + "/0.2.2.data",
-        frameworkUrl: buildUrl + "/0.2.2.framework.js",
-        codeUrl: buildUrl + "/0.2.2.wasm",
+        dataUrl: buildUrl + "/monterya0.2.3.data",
+        frameworkUrl: buildUrl + "/monterya0.2.3.framework.js",
+        codeUrl: buildUrl + "/monterya0.2.3.wasm",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "woxacorp",
         productName: "monterya",
-        productVersion: "0.2.1",
+        productVersion: "0.2.3",
         showBanner: unityShowBanner,
       };
 
@@ -93,7 +93,6 @@
       } else {
         // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
 
-
         canvas.style.width = "1280px";
         canvas.style.height = "720px";
       }
@@ -107,6 +106,7 @@
           progressBarFull.style.width = 100 * progress + "%";
         }).then((unityInstance) => {
           window.unityInstance = unityInstance; // *insert this*
+
           loadingBar.style.display = "none";
           fullscreenButton.onclick = () => {
             unityInstance.SetFullscreen(1);
@@ -117,7 +117,6 @@
       };
       document.body.appendChild(script);
     </script>
-
 
     <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-database-compat.js"></script>
